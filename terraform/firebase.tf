@@ -1,3 +1,12 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# Firebase + Firestore
+# ---------------------------------------------------------------------------------------------------------------------
+
+resource "google_firebase_project" "default" {
+  provider = google-beta
+  project  = var.google_project_id
+}
+
 resource "google_app_engine_application" "firestore" {
   project       = var.google_project_id
   location_id   = var.firebase_location
