@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - public/**
+    # paths:
+    #   - public/**
 
 jobs:
   deploy:
