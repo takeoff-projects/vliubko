@@ -181,7 +181,7 @@ fi
 export TF_VAR_google_project_id=$GOOGLE_CLOUD_PROJECT
 export GOOGLE_APPLICATION_CREDENTIALS=$GSA_KEY_FILEPATH
 
-cd terraform
+cd ops/terraform
 if [ $create_tf_init_resources == "true" ]; then
   _init_terraform
 fi

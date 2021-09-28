@@ -1,2 +1,4 @@
 .terraform*
 *key.json
+
+.DS_Store
