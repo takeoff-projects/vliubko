@@ -9,6 +9,7 @@ variable google_apis {
     "firebase.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "firestore.googleapis.com",
+    "cloudtrace.googleapis.com",
   ]
   description = "Google APIs to enable in the project"
 }

@@ -1,0 +1,125 @@
+basePath: /api/v1
+definitions:
+  model.Order:
+    properties:
+      order_lines:
+        items:
+          $ref: '#/definitions/model.OrderLine'
+        type: array
+      uuid:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+    type: object
+  model.OrderLine:
+    properties:
+      product:
+        $ref: '#/definitions/model.Product'
+      quantity:
+        example: 2
+        type: integer
+      uuid:
+        example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        format: uuid
+        type: string
+    type: object
+  model.Product:
+    properties:
+      id:
+        example: 123456
+        type: integer
+      name:
+        example: banana
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: oms-lite API, you know
+  license:
+    name: Apache 2.0
+  title: oms-lite API
+  version: "1.0"
+paths:
+  /orders:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Order'
+            type: array
+      summary: list all orders
+      tags:
+      - orders
+  /orders/:
+    post:
+      consumes:
+      - application/json
+      description: Create new Order
+      parameters:
+      - description: OrderLines to placed in the new order
+        in: body
+        name: order_lines
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/model.OrderLine'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Order'
+      summary: create new Order
+      tags:
+      - orders
+  /orders/{order_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Order by id
+      parameters:
+      - description: Order ID
+        in: path
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Order'
+      summary: delete order by id
+      tags:
+      - orders
+    get:
+      consumes:
+      - application/json
+      description: Get Order by id
+      parameters:
+      - description: Order ID
+        in: path
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Order'
+      summary: get order by id
+      tags:
+      - orders
+swagger: "2.0"
