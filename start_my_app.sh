@@ -145,6 +145,10 @@ _create_gsa() {
   --member="serviceAccount:$gsa_name@$google_project.iam.gserviceaccount.com" \
   --role="roles/storage.objectAdmin" --format json
 
+  gcloud projects add-iam-policy-binding $google_project \
+  --member="serviceAccount:$gsa_name@$google_project.iam.gserviceaccount.com" \
+  --role="roles/storage.admin" --format json
+
   _create_gsa_key $gsa_name $google_project $GSA_KEY_FILEPATH
 }
 
