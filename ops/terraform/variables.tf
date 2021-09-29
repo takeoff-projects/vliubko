@@ -15,6 +15,7 @@ variable google_apis {
     "servicecontrol.googleapis.com",
     "servicemanagement.googleapis.com",
     "iam.googleapis.com",
+    "run.googleapis.com",
   ]
   description = "Google APIs to enable in the project"
 }
