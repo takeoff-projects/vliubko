@@ -14,10 +14,7 @@
 #           image_name: server-end
 
 name: Push to GCR GitHub Action
-on:
-  push:
-    tags:
-      - "*"
+on: [push]
 jobs:
   build-and-push-to-gcr:
     runs-on: ubuntu-latest
