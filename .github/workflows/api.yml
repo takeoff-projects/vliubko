@@ -1,20 +1,10 @@
-# name: Push to GCR GitHub Action
-# on: [push]
-# jobs:
-#   build-and-push-to-gcr:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: google-github-actions/setup-gcloud@master
-#       - uses: RafikFarhad/push-to-gcr-github-action@v4
-#         with:
-#           gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-#           registry: gcr.io
-#           project_id: my-awesome-project
-#           image_name: server-end
-
 name: Push to GCR GitHub Action
 on: [push]
+
+env:
+  APP_NAME: oms-lite
+  REGISTRY: gcr.io
+
 jobs:
   build-and-push-to-gcr:
     runs-on: ubuntu-latest
@@ -33,14 +23,14 @@ jobs:
       - uses: RafikFarhad/push-to-gcr-github-action@v4
         with:
           gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
-          registry: gcr.io
+          registry: $REGISTRY
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          image_name: oms-lite
+          image_name: $APP_NAME
           image_tag: ${{ steps.get_tag_name.outputs.IMAGE_VERSION }}
       - name: Deploy Docker image
         run: |
-          IMAGE_NAME=gcr.io/${{ secrets.GCP_PROJECT_ID }}/oms-lite && \
-          gcloud run deploy \
+          IMAGE_NAME=$REGISTRY/${{ secrets.GCP_PROJECT_ID }}/$APP_NAME && \
+          gcloud run deploy $APP_NAME \
             --project ${{ secrets.GCP_PROJECT_ID }} \
             --image $IMAGE_NAME \
             --region us-central1 \
