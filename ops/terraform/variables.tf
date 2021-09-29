@@ -6,8 +6,9 @@ variable google_project_id {
 variable google_apis {
   type        = list
   default     = [
-    "firebase.googleapis.com",
     "cloudresourcemanager.googleapis.com",
+    "containerregistry.googleapis.com",
+    "firebase.googleapis.com",
     "firestore.googleapis.com",
     "cloudtrace.googleapis.com",
   ]

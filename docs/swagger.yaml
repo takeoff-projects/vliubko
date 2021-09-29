@@ -1,36 +1,25 @@
 basePath: /api/v1
 definitions:
-  model.Order:
+  handlers.JSONResult:
     properties:
-      order_lines:
-        items:
-          $ref: '#/definitions/model.OrderLine'
-        type: array
-      uuid:
-        example: 550e8400-e29b-41d4-a716-446655440000
-        format: uuid
+      status:
         type: string
     type: object
-  model.OrderLine:
+  omslitedb.CreateOrderParams:
     properties:
-      product:
-        $ref: '#/definitions/model.Product'
+      productname:
+        type: string
       quantity:
-        example: 2
         type: integer
-      uuid:
-        example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        format: uuid
-        type: string
     type: object
-  model.Product:
+  omslitedb.Order:
     properties:
       id:
-        example: 123456
         type: integer
-      name:
-        example: banana
+      productname:
         type: string
+      quantity:
+        type: integer
     type: object
 host: localhost:8080
 info:
@@ -52,7 +41,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Order'
+              $ref: '#/definitions/omslitedb.Order'
             type: array
       summary: list all orders
       tags:
@@ -61,31 +50,32 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create new Order
       parameters:
-      - description: OrderLines to placed in the new order
+      - description: Create order with product&quantity
         in: body
-        name: order_lines
+        name: order
         required: true
         schema:
-          items:
-            $ref: '#/definitions/model.OrderLine'
-          type: array
+          $ref: '#/definitions/omslitedb.CreateOrderParams'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Order'
-      summary: create new Order
+            allOf:
+            - $ref: '#/definitions/handlers.JSONResult'
+            - properties:
+                orderID:
+                  type: integer
+              type: object
+      summary: create new order
       tags:
       - orders
   /orders/{order_id}:
     delete:
       consumes:
       - application/json
-      description: Delete Order by id
       parameters:
       - description: Order ID
         in: path
@@ -98,14 +88,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Order'
+            $ref: '#/definitions/handlers.JSONResult'
       summary: delete order by id
       tags:
       - orders
     get:
       consumes:
       - application/json
-      description: Get Order by id
       parameters:
       - description: Order ID
         in: path
@@ -118,7 +107,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Order'
+            allOf:
+            - $ref: '#/definitions/handlers.JSONResult'
+            - properties:
+                order:
+                  $ref: '#/definitions/omslitedb.Order'
+              type: object
       summary: get order by id
       tags:
       - orders

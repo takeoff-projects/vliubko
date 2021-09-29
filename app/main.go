@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -10,14 +11,32 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel"
 
 	"oms-lite/app/handlers"
+	omslitedb "oms-lite/business/sys/database"
 	"oms-lite/docs"
-	otel_tracer "oms-lite/foundation"
 
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
+
+func getEnvVar(key string) string {
+	val, ok := os.LookupEnv(key)
+	log.Println("Checking", key)
+	if !ok {
+		log.Fatalf("%s not set\n", key)
+	}
+	return val
+}
+
+func checkEnvVar(key string) {
+	val, ok := os.LookupEnv(key)
+	if !ok {
+		log.Fatalf("%s not set\n", key)
+	}
+	log.Printf("%s=%s\n", key, val)
+}
 
 // @title oms-lite API
 // @version 1.0
@@ -27,16 +46,33 @@ import (
 
 // @host localhost:8080
 // @BasePath /api/v1
-
 func main() {
-	tp := otel_tracer.InitTracer()
-	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
-			log.Printf("Error shutting down tracer provider: %v", err)
-		}
-	}()
 
+	checkEnvVar("GOOGLE_APPLICATION_CREDENTIALS")
+
+	// Initialize connection string.
+	var connectionString string = fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=%s",
+		getEnvVar("POSTGRES_HOST"), getEnvVar("POSTGRES_USER"), getEnvVar("POSTGRES_PASSWORD"), getEnvVar("POSTGRES_DB"), getEnvVar("POSTGRES_SSL_MODE"))
+
+	// Use the InitDB function to open connection and get db object
+	db, err := omslitedb.InitDB(connectionString)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	handlers := handlers.NewOrderHandler(db, otel.Tracer("oms-lite"))
+
+	// init gin router
 	r := gin.Default()
+
+	// init tracing
+
+	// tp := otel_tracer.InitTracer()
+	// defer func() {
+	// 	if err := tp.Shutdown(context.Background()); err != nil {
+	// 		log.Printf("Error shutting down tracer provider: %v", err)
+	// 	}
+	// }()
 	// r.Use(otelgin.Middleware("oms-lite"))
 
 	docs.SwaggerInfo.BasePath = "/api/v1"

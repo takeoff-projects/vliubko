@@ -1,34 +1,59 @@
 package model
 
 import (
+	"errors"
+	omslitedb "oms-lite/business/sys/database"
+
 	"github.com/gin-gonic/gin"
-	"github.com/gofrs/uuid"
+	"go.opentelemetry.io/otel"
 )
 
-// Order example
-type Order struct {
-	UUID       uuid.UUID   `json:"uuid" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
-	OrderLines []OrderLine `json:"order_lines"`
+var Tracer = otel.Tracer("oms-lite")
+
+func CreateOrder(c *gin.Context, db *omslitedb.Queries, order omslitedb.CreateOrderParams) (int64, error) {
+	_, span := Tracer.Start(c.Request.Context(), "CreateOrderInDB")
+	defer span.End()
+
+	if order.Quantity <= 0 {
+		return 0, errors.New("quantity should be more than 0")
+	}
+
+	orderID, err := db.CreateOrder(c, order)
+	if err != nil {
+		return 0, err
+	}
+	return orderID, err
 }
 
-// We don't check if product exists, we except this check somewhere else (in Products service?)
-func CreateOrder(c *gin.Context, orderLines []OrderLine) (Order, error) {
-	OrderUuid, err := uuid.NewV4()
+func DeleteOrderByID(c *gin.Context, db *omslitedb.Queries, id int64) error {
+	_, span := Tracer.Start(c.Request.Context(), "DeleteOrderByIDInDB")
+	defer span.End()
+
+	err := db.DeleteOrder(c, id)
 	if err != nil {
-		return Order{}, err
+		return err
 	}
+	return nil
+}
 
-	for k := range orderLines {
-		olUuid, err := uuid.NewV4()
-		if err != nil {
-			return Order{}, err
-		}
-		orderLines[k].UUID = olUuid
-	}
+func GetOrderByID(c *gin.Context, db *omslitedb.Queries, id int64) (omslitedb.Order, error) {
+	_, span := Tracer.Start(c.Request.Context(), "GetOrderByIDInDB")
+	defer span.End()
 
-	order := Order{
-		UUID:       OrderUuid,
-		OrderLines: orderLines,
+	order, err := db.GetOrder(c, id)
+	if err != nil {
+		return omslitedb.Order{}, err
 	}
 	return order, nil
+}
+
+func ListOrders(c *gin.Context, db *omslitedb.Queries) ([]omslitedb.Order, error) {
+	_, span := Tracer.Start(c.Request.Context(), "ListOrdersInDB")
+	defer span.End()
+
+	orders, err := db.ListOrders(c)
+	if err != nil {
+		return []omslitedb.Order{}, err
+	}
+	return orders, nil
 }

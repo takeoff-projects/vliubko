@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  oms-lite:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: oms-lite
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+      - $GOMODCACHE:/go/pkg/mod
+    env_file:
+      - .env
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /app/terraform-gsa-key.json
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: db
+      POSTGRES_SSL_MODE: disable
+      GOOGLE_APPLICATION_CREDENTIALS: /app/terraform-gsa-key.json
+  db:
+    image: postgres:13-alpine
+    command: ["postgres", "-c", "log_statement=all", "-c", "log_destination=stderr"]
+    container_name: db
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+volumes:
+  db:

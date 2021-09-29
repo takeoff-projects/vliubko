@@ -5,12 +5,20 @@
 resource "google_firebase_project" "default" {
   provider = google-beta
   project  = var.google_project_id
+  
+  depends_on = [
+    google_project_service.project_services
+  ]
 }
 
 resource "google_app_engine_application" "firestore" {
   project       = var.google_project_id
   location_id   = var.firebase_location
   database_type = var.firestore_database_type
+
+  depends_on = [
+    google_firebase_project.default
+  ]
 }
 
 data "local_file" "firestore_rules" {

@@ -44,7 +44,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Order"
+                                "$ref": "#/definitions/omslitedb.Order"
                             }
                         }
                     }
@@ -53,7 +53,6 @@ var doc = `{
         },
         "/orders/": {
             "post": {
-                "description": "Create new Order",
                 "consumes": [
                     "application/json"
                 ],
@@ -63,18 +62,15 @@ var doc = `{
                 "tags": [
                     "orders"
                 ],
-                "summary": "create new Order",
+                "summary": "create new order",
                 "parameters": [
                     {
-                        "description": "OrderLines to placed in the new order",
-                        "name": "order_lines",
+                        "description": "Create order with product\u0026quantity",
+                        "name": "order",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.OrderLine"
-                            }
+                            "$ref": "#/definitions/omslitedb.CreateOrderParams"
                         }
                     }
                 ],
@@ -82,7 +78,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Order"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handlers.JSONResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "orderID": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -90,7 +98,6 @@ var doc = `{
         },
         "/orders/{order_id}": {
             "get": {
-                "description": "Get Order by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -114,13 +121,24 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Order"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handlers.JSONResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "order": {
+                                            "$ref": "#/definitions/omslitedb.Order"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
             },
             "delete": {
-                "description": "Delete Order by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -144,7 +162,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Order"
+                            "$ref": "#/definitions/handlers.JSONResult"
                         }
                     }
                 }
@@ -152,49 +170,36 @@ var doc = `{
         }
     },
     "definitions": {
-        "model.Order": {
+        "handlers.JSONResult": {
             "type": "object",
             "properties": {
-                "order_lines": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.OrderLine"
-                    }
-                },
-                "uuid": {
-                    "type": "string",
-                    "format": "uuid",
-                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                "status": {
+                    "type": "string"
                 }
             }
         },
-        "model.OrderLine": {
+        "omslitedb.CreateOrderParams": {
             "type": "object",
             "properties": {
-                "product": {
-                    "$ref": "#/definitions/model.Product"
+                "productname": {
+                    "type": "string"
                 },
                 "quantity": {
-                    "type": "integer",
-                    "example": 2
-                },
-                "uuid": {
-                    "type": "string",
-                    "format": "uuid",
-                    "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    "type": "integer"
                 }
             }
         },
-        "model.Product": {
+        "omslitedb.Order": {
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "integer",
-                    "example": 123456
+                    "type": "integer"
                 },
-                "name": {
-                    "type": "string",
-                    "example": "banana"
+                "productname": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
                 }
             }
         }
