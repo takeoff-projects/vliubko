@@ -34,7 +34,7 @@ RUN cd app && CGO_ENABLED=0 GOOS=linux go build -a -o oms-lite .
 #------------------------------
 # generate clean, final image for end users
 #------------------------------
-FROM gcr.io/distroless/base-debian10
+FROM gcr.io/distroless/base-debian10 as final
 COPY --from=builder /app/app/oms-lite .
 
 USER nonroot:nonroot
