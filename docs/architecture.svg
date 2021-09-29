@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="181px" preserveAspectRatio="none" style="width:531px;height:181px;background:#FFFFFF;" version="1.1" viewBox="0 0 531 181" width="531px" zoomAndPan="magnify"><defs/><g><!--MD5=[fee662a292a0353a69bd162820bae93b]
+entity User--><rect fill="#FEFECE" height="36" style="stroke:#000000;stroke-width:1.5;" width="54" x="7" y="10.5"/><text fill="#000000" font-family="Helvetica" font-size="16" lengthAdjust="spacing" textLength="34" x="17" y="32.8203">User</text><!--MD5=[194a92f280a7d2c2f105939ff984a7cf]
+entity Frontend--><rect fill="#C2F0FF" height="36" style="stroke:#000000;stroke-width:1.5;" width="84" x="155" y="10.5"/><text fill="#000000" font-family="Helvetica" font-size="16" lengthAdjust="spacing" textLength="64" x="165" y="32.8203">Frontend</text><!--MD5=[645d8587175d8f7ad110cd370775931d]
+entity API--><rect fill="#C2F0FF" height="36" style="stroke:#000000;stroke-width:1.5;" width="46" x="302" y="10.5"/><text fill="#000000" font-family="Helvetica" font-size="16" lengthAdjust="spacing" textLength="26" x="312" y="32.8203">API</text><!--MD5=[20bda74a2930c3c89bdb9d4a9c5a8a55]
+entity CloudSQL--><path d="M429.5,16 C429.5,6 477,6 477,6 C477,6 524.5,6 524.5,16 L524.5,41 C524.5,51 477,51 477,51 C477,51 429.5,51 429.5,41 L429.5,16 " fill="#C9FFC9" style="stroke:#000000;stroke-width:1.5;"/><path d="M429.5,16 C429.5,26 477,26 477,26 C477,26 524.5,26 524.5,16 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Helvetica" font-size="16" lengthAdjust="spacing" textLength="75" x="439.5" y="42.3203">CloudSQL</text><!--MD5=[4ba1758831e04b7e85137b059316f421]
+entity Firestore--><path d="M155.5,139 C155.5,129 197,129 197,129 C197,129 238.5,129 238.5,139 L238.5,164 C238.5,174 197,174 197,174 C197,174 155.5,174 155.5,164 L155.5,139 " fill="#C9FFC9" style="stroke:#000000;stroke-width:1.5;"/><path d="M155.5,139 C155.5,149 197,149 197,149 C197,149 238.5,149 238.5,139 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Helvetica" font-size="16" lengthAdjust="spacing" textLength="63" x="165.5" y="165.3203">Firestore</text><!--MD5=[c9f718fe4a051611c03c12aa41ba5d12]
+link User to Frontend--><path d="M66.54,28.5 C90.34,28.5 122.98,28.5 149.66,28.5 " fill="none" id="User-Frontend" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="154.92,28.5,145.92,24.5,149.92,28.5,145.92,32.5,154.92,28.5" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="61.28,28.5,70.28,32.5,66.28,28.5,70.28,24.5,61.28,28.5" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Helvetica" font-size="16" lengthAdjust="spacing" textLength="57" x="79.5" y="20.8203">browser</text><!--MD5=[8300d6f31da3a6901c7e03210cc4c0c1]
+link Frontend to API--><path d="M244.71,28.5 C262.24,28.5 281.52,28.5 296.79,28.5 " fill="none" id="Frontend-API" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="301.81,28.5,292.81,24.5,296.81,28.5,292.81,32.5,301.81,28.5" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="239.27,28.5,248.27,32.5,244.27,28.5,248.27,24.5,239.27,28.5" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Helvetica" font-size="16" lengthAdjust="spacing" textLength="26" x="257.5" y="20.8203">http</text><!--MD5=[0ce8380045f678ddda72c3aba721a2b9]
+link Frontend to Firestore--><path d="M197,51.61 C197,71.87 197,101.9 197,123.55 " fill="none" id="Frontend-Firestore" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="197,128.59,201,119.59,197,123.59,193,119.59,197,128.59" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="197,46.58,193,55.58,197,51.58,201,55.58,197,46.58" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Helvetica" font-size="16" lengthAdjust="spacing" textLength="51" x="198" y="94.3203">pickers</text><!--MD5=[013c352e6ee675770af5855e82167d9d]
+link API to CloudSQL--><path d="M353.32,28.5 C373.26,28.5 400.53,28.5 424.4,28.5 " fill="none" id="API-CloudSQL" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="429.43,28.5,420.43,24.5,424.43,28.5,420.43,32.5,429.43,28.5" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="348.09,28.5,357.09,32.5,353.09,28.5,357.09,24.5,348.09,28.5" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Helvetica" font-size="16" lengthAdjust="spacing" textLength="45" x="366.25" y="20.8203">orders</text><!--MD5=[e25441f4120efe0521e89688f8910082]
+@startuml
+
+' style
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 16
+skinparam ArrowColor #black
+hide stereotype
+skinparam componentStyle rectangle
+skinparam databaseStyle plain
+
+' components
+component User
+component Frontend #application
+component API #application
+database CloudSQL #technology
+database Firestore #technology
+
+' interactions
+(User) <-> (Frontend) : browser
+(Frontend) <-> (API) : http
+(Frontend) <-down-> (Firestore) : pickers
+(API) <-right-> (CloudSQL) : orders
+
+
+@enduml
+
+@startuml
+
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 16
+skinparam ArrowColor #black
+hide stereotype
+skinparam componentStyle rectangle
+skinparam databaseStyle plain
+
+component User
+component Frontend #application
+component API #application
+database CloudSQL #technology
+database Firestore #technology
+
+(User) <-> (Frontend) : browser
+(Frontend) <-> (API) : http
+(Frontend) <-down-> (Firestore) : pickers
+(API) <-right-> (CloudSQL) : orders
+
+
+@enduml
+
+PlantUML version 1.2021.7(Sun May 23 15:40:07 EEST 2021)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: UA
+--></g></svg>

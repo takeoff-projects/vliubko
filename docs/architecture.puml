@@ -1,0 +1,26 @@
+@startuml
+
+' style
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 16
+skinparam ArrowColor #black
+hide stereotype
+skinparam componentStyle rectangle
+skinparam databaseStyle plain
+
+' components
+component User
+component Frontend #application
+component API #application
+database CloudSQL #technology
+database Firestore #technology
+
+' interactions
+(User) <-> (Frontend) : browser
+(Frontend) <-> (API) : http
+(Frontend) <-down-> (Firestore) : pickers
+(API) <-right-> (CloudSQL) : orders
+
+
+@enduml
