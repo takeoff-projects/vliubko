@@ -33,7 +33,8 @@ jobs:
           IMAGE_NAME=${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.APP_NAME }} && \
           gcloud run deploy ${{ env.APP_NAME }} \
             --project ${{ secrets.GCP_PROJECT_ID }} \
-            --image $IMAGE_NAME \
+            --service-account "${{ env.APP_NAME }}@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
+            --image $IMAGE_NAME:${{ steps.get_tag_name.outputs.IMAGE_VERSION }} \
             --region us-central1 \
             --platform managed \
-            --allow-unauthenticated
+            --allow-unauthenticated \
