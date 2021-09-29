@@ -1,0 +1,21 @@
+name: Test
+
+on:
+  pull_request:
+    paths:
+      - "app/**"
+      - "business/**"
+      - "foundation/**"
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          args: --timeout=10m0s -c .golangci.yaml
+          version: v1.42.1
