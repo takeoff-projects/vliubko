@@ -23,14 +23,14 @@ jobs:
       - uses: RafikFarhad/push-to-gcr-github-action@v4
         with:
           gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
-          registry: $REGISTRY
+          registry: ${{ env.REGISTRY }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          image_name: $APP_NAME
+          image_name: ${{ env.APP_NAME }}
           image_tag: ${{ steps.get_tag_name.outputs.IMAGE_VERSION }}
       - name: Deploy Docker image
         run: |
-          IMAGE_NAME=$REGISTRY/${{ secrets.GCP_PROJECT_ID }}/$APP_NAME && \
-          gcloud run deploy $APP_NAME \
+          IMAGE_NAME=${{ env.REGISTRY }}/${{ secrets.GCP_PROJECT_ID }}/${{ env.APP_NAME }} && \
+          gcloud run deploy ${{ env.APP_NAME }} \
             --project ${{ secrets.GCP_PROJECT_ID }} \
             --image $IMAGE_NAME \
             --region us-central1 \
