@@ -24,4 +24,4 @@ jobs:
       - name: Get the tag name
         id: get_tag_name
         run: echo ::set-output name=IMAGE_VERSION::$(date +%y-%m-%d).$GITHUB_RUN_NUMBER
-      - run: echo $IMAGE_VERSION
+      - run: echo ${{ steps.get_tag_name.outputs.IMAGE_VERSION }}
