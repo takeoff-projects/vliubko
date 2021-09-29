@@ -48,6 +48,7 @@ jobs:
           # Set the desired build target here
           target: final
           push: false
+          load: true
           tags: ${{ steps.prep.outputs.tagged_image }}
           cache-from: type=local,src=/tmp/.buildx-cache
           # Note the mode=max here
