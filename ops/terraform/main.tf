@@ -39,7 +39,7 @@ resource "google_project_service" "project_services" {
 
 resource "google_container_registry" "registry" {
   project  = var.google_project_id
-  location = "EU"
+  location = "US"
 
   depends_on = [
     google_project_service.project_services
