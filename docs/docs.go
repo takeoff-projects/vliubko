@@ -42,10 +42,22 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/omslitedb.Order"
-                            }
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handlers.JSONResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "orders": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/omslitedb.Order"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }

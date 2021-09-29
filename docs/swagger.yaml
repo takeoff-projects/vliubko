@@ -40,9 +40,14 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/omslitedb.Order'
-            type: array
+            allOf:
+            - $ref: '#/definitions/handlers.JSONResult'
+            - properties:
+                orders:
+                  items:
+                    $ref: '#/definitions/omslitedb.Order'
+                  type: array
+              type: object
       summary: list all orders
       tags:
       - orders

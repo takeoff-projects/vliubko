@@ -13,6 +13,8 @@ variable google_apis {
     "cloudtrace.googleapis.com",
     "apigateway.googleapis.com",
     "servicecontrol.googleapis.com",
+    "servicemanagement.googleapis.com",
+    "iam.googleapis.com",
   ]
   description = "Google APIs to enable in the project"
 }

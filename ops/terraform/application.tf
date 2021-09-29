@@ -33,3 +33,18 @@
 #   }
 #   autogenerate_revision_name = true
 # }
+
+resource "google_service_account" "sa" {
+  account_id   = "oms-lite"
+  display_name = "oms-lite"
+
+  depends_on = [
+    google_project_service.project_services
+  ]
+}
+
+resource "google_project_iam_member" "trace_agent" {
+  project = var.google_project_id
+  role    = "roles/cloudtrace.agent"
+  member  = "serviceAccount:${google_service_account.sa.email}"
+}

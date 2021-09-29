@@ -37,3 +37,10 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           image_name: oms-lite
           image_tag: ${{ steps.get_tag_name.outputs.IMAGE_VERSION }}
+      - name: Deploy Docker image
+        run: | 
+          gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} \
+            --image $IMAGE_NAME \
+            --region us-central1 \
+            --platform managed \
+            --allow-unauthenticated
