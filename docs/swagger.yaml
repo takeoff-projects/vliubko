@@ -21,7 +21,6 @@ definitions:
       quantity:
         type: integer
     type: object
-host: localhost:8080
 info:
   contact: {}
   description: oms-lite API, you know

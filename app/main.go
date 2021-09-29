@@ -44,7 +44,6 @@ func checkEnvVar(key string) {
 
 // @license.name Apache 2.0
 
-// @host localhost:8080
 // @BasePath /api/v1
 func main() {
 
