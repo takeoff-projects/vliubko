@@ -40,7 +40,8 @@ jobs:
       - name: Deploy Docker image
         run: |
           IMAGE_NAME=gcr.io/${{ secrets.GCP_PROJECT_ID }}/oms-lite && \
-          gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} \
+          gcloud run deploy \
+            --project ${{ secrets.GCP_PROJECT_ID }} \
             --image $IMAGE_NAME \
             --region us-central1 \
             --platform managed \
