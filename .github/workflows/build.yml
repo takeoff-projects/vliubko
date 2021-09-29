@@ -25,3 +25,9 @@ jobs:
         id: get_tag_name
         run: echo ::set-output name=IMAGE_VERSION::$(date +%y-%m-%d).$GITHUB_RUN_NUMBER
       - run: echo ${{ steps.get_tag_name.outputs.IMAGE_VERSION }}
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+      - run: gcloud info
