@@ -32,8 +32,8 @@ jobs:
           export_default_credentials: true
       - uses: RafikFarhad/push-to-gcr-github-action@v4
         with:
-          gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+          gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
           registry: gcr.io
-          project_id: ${{ secrets.GCLOUD_SERVICE_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
           image_name: oms-lite
           image_tag: ${{ steps.get_tag_name.outputs.IMAGE_VERSION }}
