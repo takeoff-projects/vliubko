@@ -68,7 +68,7 @@ _die() {
 
 _parse_params() {
   # default values of variables set from params
-  create_tf_init_resources=true
+  create_init_resources=true
   GOOGLE_CLOUD_PROJECT=''
 
   while :; do
@@ -76,7 +76,7 @@ _parse_params() {
     -h | --help) usage ;;
     -v | --verbose) set -x ;;
     --no-color) NO_COLOR=1 ;;
-    -c | --create_tf_init_resources) create_tf_init_resources=false ;; # example flag
+    -c | --create_init_resources) create_init_resources=false ;; # example flag
     -g | --google_cloud_project) # example named parameter
       GOOGLE_CLOUD_PROJECT="${2-}"
       shift
@@ -98,45 +98,54 @@ _parse_params() {
 
 _create_terraform_bucket() {
     _log "INFO" "Creating bucket $TF_STATE_BUCKET_NAME.."
-    gsutil mb -p $GOOGLE_CLOUD_PROJECT gs://$TF_STATE_BUCKET_NAME 2&>/dev/null || true
+    gsutil mb -b -p $GOOGLE_CLOUD_PROJECT gs://$TF_STATE_BUCKET_NAME 2&>/dev/null || true
 }
 
-_create_terraform_gsa_key() {
-  _log "INFO" "Creating GSA key for terraform..."
+_create_gsa_key() {
+	local gsa_name=$1
+	local google_project=$2
+  local gsa_key_file=$3
+
+  _log "INFO" "Creating GSA key for $gsa_name..."
   
-  gcloud iam service-accounts keys create $GSA_KEY_FILEPATH \
-    --iam-account="terraform@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com"
+  gcloud iam service-accounts keys create "$(pwd)/$gsa_name-gsa-key.json" \
+    --iam-account="$gsa_name@$google_project.iam.gserviceaccount.com"
 }
 
-_create_terraform_gsa() {
-    # check if exist already
-    terraform_gsa=$(gcloud iam service-accounts list --project $GOOGLE_CLOUD_PROJECT --format json | jq '.[] | select (.displayName == "terraform")')
-    if [ -z "$terraform_gsa" ]; then
-      _log "INFO" "Creating GSA (google service account) for terraform..."
-    else
-      _log "INFO" "GSA already exist, skipping.."
-      if test -f "$GSA_KEY_FILEPATH"; then
-        echo "$GSA_KEY_FILEPATH exists and will be used"
-        return
-      fi
-      _create_terraform_gsa_key
+_create_gsa() {
+	local gsa_name=$1
+	local google_project=$2
+
+  _log "INFO" "Creating GSA for $gsa_name..."
+  # check if exist already
+  gsa_exist=$(gcloud iam service-accounts list --project $google_project --format json | jq '.[] | select (.displayName == "'"$gsa_name"'")')
+  if [ -z "$gsa_exist" ]; then
+    _log "INFO" "Creating GSA (google service account) for $gsa_name..."
+  else
+    _log "INFO" "GSA $gsa_name already exist, skipping.."
+    if test -f "$GSA_KEY_FILEPATH"; then
+      echo "$GSA_KEY_FILEPATH exists and will be used"
       return
     fi
+    _create_gsa_key $gsa_name $google_project $GSA_KEY_FILEPATH
+    return
+  fi
 
-    gcloud iam service-accounts create terraform \
-    --description="SA for terraform stuff" \
-    --display-name="terraform" \
-    --project ${GOOGLE_CLOUD_PROJECT}
+  gcloud iam service-accounts create $gsa_name \
+    --description="SA for $gsa_name stuff" \
+    --display-name="$gsa_name" \
+    --project "$google_project"
 
-    _log "INFO" "Grant owner role for terraform GSA..."
-    gcloud projects add-iam-policy-binding ${GOOGLE_CLOUD_PROJECT} \
-    --member="serviceAccount:terraform@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com" \
-    --role="roles/owner" \
-    2&>/dev/null
+  _log "INFO" "Grant owner role for $gsa_name GSA..."
+  gcloud projects add-iam-policy-binding $google_project \
+  --member="serviceAccount:$gsa_name@$google_project.iam.gserviceaccount.com" \
+  --role="roles/owner" --format json
+  
+  gcloud projects add-iam-policy-binding $google_project \
+  --member="serviceAccount:$gsa_name@$google_project.iam.gserviceaccount.com" \
+  --role="roles/storage.objectAdmin" --format json
 
-    # wait some time until IAM will propagate (required for terraform bucket access)
-    sleep 15
-    _create_terraform_gsa_key
+  _create_gsa_key $gsa_name $google_project $GSA_KEY_FILEPATH
 }
 
 _init_terraform() {
@@ -164,7 +173,7 @@ _assert_is_installed "terraform"
 
 # check the args/flags
 _log "INFO" "${GREEN}Read parameters:${NOFORMAT}"
-_log "INFO" "- create_tf_init_resources: ${create_tf_init_resources}"
+_log "INFO" "- create_init_resources: ${create_init_resources}"
 _log "INFO" "- google_cloud_project: ${GOOGLE_CLOUD_PROJECT}"
 _log "INFO" "- arguments: ${args[*]-}"
 
@@ -172,9 +181,10 @@ _log "INFO" "- arguments: ${args[*]-}"
 TF_STATE_BUCKET_NAME="terraform-state-bucket-$GOOGLE_CLOUD_PROJECT"
 GSA_KEY_FILEPATH="$(pwd)/terraform-gsa-key.json"
 
-if [ $create_tf_init_resources == "true" ]; then
-  _create_terraform_gsa
+if [ $create_init_resources == "true" ]; then
   _create_terraform_bucket
+  _create_gsa "terraform" $GOOGLE_CLOUD_PROJECT
+  _create_gsa "github" $GOOGLE_CLOUD_PROJECT
 fi
 
 # will be used by terraform code
@@ -182,12 +192,20 @@ export TF_VAR_google_project_id=$GOOGLE_CLOUD_PROJECT
 export GOOGLE_APPLICATION_CREDENTIALS=$GSA_KEY_FILEPATH
 
 cd ops/terraform
-if [ $create_tf_init_resources == "true" ]; then
+if [ $create_init_resources == "true" ]; then
+  set +e
   _init_terraform
+  while [ $? -ne 0 ]; do
+    _log "INFO" "need some time until Google Cloud IAM will propagate (required for terraform bucket access)..."
+    sleep 30
+    _init_terraform
+  done
+  set -e
 fi
+
 _apply_terraform
 
-if [ $create_tf_init_resources == "true" ]; then
+if [ $create_init_resources == "true" ]; then
   echo "Please open Firebase and activate Auth section manually in the browser..."
   open "https://console.firebase.google.com/project/$GOOGLE_CLOUD_PROJECT/authentication"
 fi
