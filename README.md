@@ -87,7 +87,7 @@ Specifications:
 * Graceful shutdown on interrupt signals
 <!-- * Health checks (readiness and liveness) -->
 * Tracing with OpenTelemetry and Google Trace
-* Swagger docs
+* semi-auto generated OpenAPI docs (to be used by Swagger UI and API gateway) 
 <!-- * Helm and Kustomize installers -->
 <!-- * End-to-End testing with Kubernetes Kind and Helm -->
 <!-- * CVE scanning with trivy -->
