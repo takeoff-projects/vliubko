@@ -1,4 +1,4 @@
-package otel_tracer
+package oteltracer
 
 import (
 	"log"
@@ -21,6 +21,7 @@ func InitTracer() *sdktrace.TracerProvider {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	tp := sdktrace.NewTracerProvider(
 		sdktrace.WithSampler(sdktrace.AlwaysSample()),
 		sdktrace.WithBatcher(gcpTraceExporter),

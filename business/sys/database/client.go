@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-
-	_ "github.com/lib/pq"
 )
 
 // InitDB sets up setting up the connection pool global variable.

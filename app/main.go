@@ -17,10 +17,12 @@ import (
 	"oms-lite/app/handlers"
 	omslitedb "oms-lite/business/sys/database"
 	"oms-lite/docs"
-	otel_tracer "oms-lite/foundation"
+	oteltracer "oms-lite/foundation"
 
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+
+	_ "github.com/lib/pq"
 )
 
 // mustGetEnv is a helper function for getting environment variables.
@@ -76,7 +78,7 @@ func main() {
 		connectionString = fmt.Sprintf("user=%s password=%s database=%s host=%s/%s",
 			dbUser, dbPwd, dbName, socketDir, instanceConnectionName)
 		// init tracing for non local mode
-		tp := otel_tracer.InitTracer()
+		tp := oteltracer.InitTracer()
 		defer func() {
 			if err := tp.Shutdown(context.Background()); err != nil {
 				log.Printf("Error shutting down tracer provider: %v", err)

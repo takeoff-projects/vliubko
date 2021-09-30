@@ -22,6 +22,7 @@ func CreateOrder(c *gin.Context, db *omslitedb.Queries, order omslitedb.CreateOr
 	if err != nil {
 		return 0, err
 	}
+
 	return orderID, err
 }
 
@@ -33,6 +34,7 @@ func DeleteOrderByID(c *gin.Context, db *omslitedb.Queries, id int64) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -44,6 +46,7 @@ func GetOrderByID(c *gin.Context, db *omslitedb.Queries, id int64) (omslitedb.Or
 	if err != nil {
 		return omslitedb.Order{}, err
 	}
+
 	return order, nil
 }
 
@@ -55,5 +58,6 @@ func ListOrders(c *gin.Context, db *omslitedb.Queries) ([]omslitedb.Order, error
 	if err != nil {
 		return []omslitedb.Order{}, err
 	}
+
 	return orders, nil
 }
