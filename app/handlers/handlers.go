@@ -132,7 +132,7 @@ func (h *OrderHandler) DeleteOrderHandler(c *gin.Context) {
 // @Produce json
 // @Param order body omslitedb.CreateOrderParams true "Create order with product&quantity"
 // @Success 200 {object} JSONResult{orderID=int64}
-// @Router /orders/ [post]
+// @Router /orders [post]
 func (h *OrderHandler) CreateOrderHandler(c *gin.Context) {
 	_, span := h.Tracer.Start(c.Request.Context(), "CreateOrderHandler")
 	defer span.End()

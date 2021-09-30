@@ -62,9 +62,7 @@ var doc = `{
                         }
                     }
                 }
-            }
-        },
-        "/orders/": {
+            },
             "post": {
                 "consumes": [
                     "application/json"

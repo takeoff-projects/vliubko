@@ -51,7 +51,6 @@ paths:
       summary: list all orders
       tags:
       - orders
-  /orders/:
     post:
       consumes:
       - application/json
