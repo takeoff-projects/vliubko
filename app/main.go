@@ -70,7 +70,7 @@ func main() {
 		socketDir = "/cloudsql"
 	}
 
-	connectionString := fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", dbUser, dbPwd, socketDir, instanceConnectionName, dbName)
+	connectionString := fmt.Sprintf("user=%s password=%s database=%s host=%s/%s", dbUser, dbPwd, dbName, socketDir, instanceConnectionName)
 
 	// Use the InitDB function to open connection and get db object
 	db, err := omslitedb.InitDB(connectionString)
