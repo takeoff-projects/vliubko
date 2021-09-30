@@ -5,7 +5,7 @@
 ---
 **NOTE**
 
-Readme (and _some_ things) are still in progress / not enabled / not working.
+Readme (and _some_ things) are still in progress / not enabled / not working.  
 Contact me in Slack if any questions
 
 ---
@@ -26,42 +26,48 @@ Project contains three levels:
 
 ### Website
 
-- **Bootstrap** + **jQuery**: to build the layout
-- client-side **JavaScript** + **Firestore DB**: to save/delete the data
-- **Github Actions**: to build and deploy the project
-- **Github Pages**: to host the static Website
+|                              |                                 |
+|------------------------------|---------------------------------|
+| **HTML/JavaScript**          | fully client-side rendering     |
+| **Bootstrap**  +  **jQuery** | to build the layout             |
+| **Firestore DB**             | to save/delete the data         |
+| **Github Actions**           | to build and deploy the project |
+| **Github Pages**             | to host the static Website      |
 
 ### RESTful API
 
-- [layout structure](https://github.com/TakeoffTech/webhook-provider/blob/master/docs/project_structure.md): it was proposed by arch group
-- [go-gin](https://github.com/gin-gonic/gin): web framework with all the stuff needed for a quickstart
-- [OpenTelemetry client](https://github.com/open-telemetry/opentelemetry-go): configured to send traces to the [Google Tracing](https://console.cloud.google.com/traces/list?project=roi-takeoff-user77)
-- [swaggo/swag](https://github.com/swaggo/swag): to generate OpenAPI/Swagger docs
-- 
+|                                                                                                             |                                                                                                                             |
+|-------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| **layout structure**  https://github.com/TakeoffTech/webhook-provider/blob/master/docs/project_structure.md | as it was proposed by arch group                                                                                            |
+| **go-gin** https://github.com/gin-gonic/gin                                                                 | web framework with all the stuff needed for a quickstart                                                                    |
+| **OpenTelemetry client** https://github.com/open-telemetry/opentelemetry-go                                 | configured to send traces to the  [Google Tracing](https://console.cloud.google.com/traces/list?project=roi-takeoff-user77) |
+| swaggo/swag https://github.com/swaggo/swag                                                                  | to generate OpenAPI/Swagger docs                                                                                            |
+| sqlc https://github.com/kyleconroy/sqlc                                                                     | to generate type-safe source code from SQL                                                                                  |
+| **air** https://github.com/cosmtrek/air                                                                     | to enable faster development (live reload for for Go apps)                                                                  |
 ## Run Locally
 
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/takeoff-projects/vliubko
 ```
 
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd vliubko
 ```
 
-Install dependencies
+Start UI and API
 
 ```bash
-  npm install
+  make run
 ```
 
-Start the server
+Open separate terminal window and run DB migrations
 
 ```bash
-  npm run start
+  make migrate-up
 ```
 
   
