@@ -45,7 +45,7 @@ var (
 	dbPwd                  = mustGetenv("POSTGRES_PASSWORD")        // e.g. 'my-db-password'
 	instanceConnectionName = mustGetenv("INSTANCE_CONNECTION_NAME") // e.g. 'project:region:instance'
 	dbName                 = mustGetenv("POSTGRES_DB")              // e.g. 'my-database'
-	dbHost                 = mustGetenv("POSTGRES_HOST")            // e.g. 'localhost'
+	// dbHost                 = mustGetenv("POSTGRES_HOST")            // e.g. 'localhost'
 )
 
 // @title oms-lite API
