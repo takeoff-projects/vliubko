@@ -21,11 +21,13 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
-func getEnvVar(key string) string {
+// mustGetEnv is a helper function for getting environment variables.
+// Displays a warning if the environment variable is not set.
+func mustGetenv(key string) string {
 	val, ok := os.LookupEnv(key)
 	log.Println("Checking", key)
 	if !ok {
-		log.Fatalf("%s not set\n", key)
+		log.Fatalf("Warning: %s environment variable not set.\n", key)
 	}
 	return val
 }
@@ -37,6 +39,14 @@ func checkEnvVar(key string) {
 	}
 	log.Printf("%s=%s\n", key, val)
 }
+
+var (
+	dbUser                 = mustGetenv("POSTGRES_USER")            // e.g. 'my-db-user'
+	dbPwd                  = mustGetenv("POSTGRES_PASSWORD")        // e.g. 'my-db-password'
+	instanceConnectionName = mustGetenv("INSTANCE_CONNECTION_NAME") // e.g. 'project:region:instance'
+	dbName                 = mustGetenv("POSTGRES_DB")              // e.g. 'my-database'
+	dbHost                 = mustGetenv("POSTGRES_HOST")            // e.g. 'localhost'
+)
 
 // @title oms-lite API
 // @version 1.0
@@ -50,9 +60,17 @@ func main() {
 	// TODO: enable this check for local mode
 	// checkEnvVar("GOOGLE_APPLICATION_CREDENTIALS")
 
-	// Initialize connection string.
-	var connectionString string = fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=%s",
-		getEnvVar("POSTGRES_HOST"), getEnvVar("POSTGRES_USER"), getEnvVar("POSTGRES_PASSWORD"), getEnvVar("POSTGRES_DB"), getEnvVar("POSTGRES_SSL_MODE"))
+	// Initialize connection string for local mode
+	// var connectionString string = fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=%s",
+	// 	mustGetenv("POSTGRES_HOST"), mustGetenv("POSTGRES_USER"), mustGetenv("POSTGRES_PASSWORD"), mustGetenv("POSTGRES_DB"), mustGetenv("POSTGRES_SSL_MODE"))
+
+	// if not local mode
+	socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+	if !isSet {
+		socketDir = "/cloudsql"
+	}
+
+	connectionString := fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", dbUser, dbPwd, socketDir, instanceConnectionName, dbName)
 
 	// Use the InitDB function to open connection and get db object
 	db, err := omslitedb.InitDB(connectionString)
