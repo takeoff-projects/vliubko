@@ -1,11 +1,11 @@
 terraform {
   required_providers {
     google = {
-      source = "hashicorp/google"
+      source  = "hashicorp/google"
       version = "3.85.0"
     }
     google-beta = {
-      source = "hashicorp/google-beta"
+      source  = "hashicorp/google-beta"
       version = "3.85.0"
     }
   }
@@ -32,9 +32,9 @@ provider "google-beta" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "google_project_service" "project_services" {
-  for_each                   = toset(var.google_apis)
-  project                    = var.google_project_id
-  service                    = each.value
+  for_each = toset(var.google_apis)
+  project  = var.google_project_id
+  service  = each.value
 }
 
 resource "google_container_registry" "registry" {
