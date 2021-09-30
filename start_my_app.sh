@@ -207,9 +207,21 @@ if [ $create_init_resources == "true" ]; then
   set -e
 fi
 
-_apply_terraform
+# _apply_terraform
+
+# back from terraform dir
+cd "../.."
 
 if [ $create_init_resources == "true" ]; then
   echo "Please open Firebase and activate Auth section manually in the browser..."
   open "https://console.firebase.google.com/project/$GOOGLE_CLOUD_PROJECT/authentication"
 fi
+
+
+CLOUDSQL_INSTANCE_NAME=$(gcloud sql instances list --project $GOOGLE_CLOUD_PROJECT --format json | jq -r '.[].name')
+CLOUDSQL_INSTANCE_IP_ADDRESS=$(gcloud sql instances list --project $GOOGLE_CLOUD_PROJECT --format json | jq -r '.[].ipAddresses[].ipAddress')
+CLOUDSQL_DB_NAME="oms-lite"
+CLOUDSQL_DB_USER="oms-lite"
+CLOUDSQL_DB_PASSWORD="oms-lite"
+
+expect init_scripts/cloudsql_autoconnect.exp $CLOUDSQL_INSTANCE_NAME $CLOUDSQL_DB_USER $CLOUDSQL_DB_PASSWORD $GOOGLE_CLOUD_PROJECT

@@ -1,0 +1,15 @@
+#!/usr/bin/expect -f
+   
+# Call command with "expect cloudsql_autoconnect.exp $INSTANCE $USER $PASSWORD",
+# or place the arguments literally in the script, where the variables are.
+set INSTANCE [lindex $argv 0]
+set USER [lindex $argv 1]
+set PASSWORD [lindex $argv 2] 
+set GOOGLE_PROJECT_ID [lindex $argv 3] 
+
+set timeout -1
+
+spawn gcloud sql connect $INSTANCE --user=$USER --project=$GOOGLE_PROJECT_ID
+expect "*Password*"
+send -- "$PASSWORD\r"
+expect eof
