@@ -10,7 +10,7 @@ _Contact me in Slack if any questions_
 ---
 ![OMS lite logo](public/oms-lite-logo.png?raw=true "OMS lite logo")
 
-Cola and Pepsi have their _light_ versions, so perhaps OMS also should has?
+Cola and Pepsi have their _light_ versions, so perhaps OMS also should has?  
 Welcome **OMS-lite** — a magic place where an order could contain only one product!
 
 ---
@@ -95,4 +95,4 @@ Specifications:
 
 Insert gif or link to demo
 
-![OMS lite logo](public/oms-lite-str.png.png?raw=true "OMS lite logo")
+![OMS lite logo](public/oms-lite-str.png?raw=true "OMS lite logo")
