@@ -1,12 +1,17 @@
 
 # oms-lite
-## /Takeoff GCP Applied Skills Project/
 
 ---
-**NOTE**
+### IMPORTANT NOTE
 
 Readme (and _some_ things) are still in progress / not enabled / not working.  
-Contact me in Slack if any questions
+_Contact me in Slack if any questions_
+
+---
+![OMS lite logo](public/oms-lite-logo.png?raw=true "OMS lite logo")
+
+Cola and Pepsi have their _light_ versions, so perhaps OMS also should has?
+Welcome **OMS-lite** — a magic place where an order could contain only one product!
 
 ---
 
@@ -41,9 +46,10 @@ Project contains three levels:
 | **layout structure**  https://github.com/TakeoffTech/webhook-provider/blob/master/docs/project_structure.md | as it was proposed by arch group                                                                                            |
 | **go-gin** https://github.com/gin-gonic/gin                                                                 | web framework with all the stuff needed for a quickstart                                                                    |
 | **OpenTelemetry client** https://github.com/open-telemetry/opentelemetry-go                                 | configured to send traces to the  [Google Tracing](https://console.cloud.google.com/traces/list?project=roi-takeoff-user77) |
-| swaggo/swag https://github.com/swaggo/swag                                                                  | to generate OpenAPI/Swagger docs                                                                                            |
-| sqlc https://github.com/kyleconroy/sqlc                                                                     | to generate type-safe source code from SQL                                                                                  |
+| **swaggo/swag** https://github.com/swaggo/swag                                                              | to generate OpenAPI/Swagger docs                                                                                            |
+| **sqlc** https://github.com/kyleconroy/sqlc                                                                 | to generate type-safe source code from SQL                                                                                  |
 | **air** https://github.com/cosmtrek/air                                                                     | to enable faster development (live reload for for Go apps)                                                                  |
+
 ## Run Locally
 
 Clone the project
@@ -70,30 +76,23 @@ Open separate terminal window and run DB migrations
   make migrate-up
 ```
 
-  
 ## Features
 
 Specifications:
 
-* Mult-stage lightweight Docker image
+* Multi-stage lightweight Docker image
 * Cached steps in the Docker image (faster CI)
-* Health checks (readiness and liveness)
+* Cached Docker buildx and Github Actions (faster CI)
+* GolangCI linter for Pull Requests
 * Graceful shutdown on interrupt signals
-* File watcher for secrets and configmaps
-* Instrumented with Prometheus
-* Tracing with Istio and Jaeger
-* Linkerd service profile
-* Structured logging with zap 
-* 12-factor app with viper
-* Fault injection (random errors and latency)
+<!-- * Health checks (readiness and liveness) -->
+* Tracing with OpenTelemetry and Google Trace
 * Swagger docs
-* Helm and Kustomize installers
-* End-to-End testing with Kubernetes Kind and Helm
-* Kustomize testing with GitHub Actions and Open Policy Agent
-* Multi-arch container image with Docker buildx and Github Actions
-* CVE scanning with trivy
+<!-- * Helm and Kustomize installers -->
+<!-- * End-to-End testing with Kubernetes Kind and Helm -->
+<!-- * CVE scanning with trivy -->
 ## Demo
 
 Insert gif or link to demo
 
-  
+![OMS lite logo](public/oms-lite-str.png.png?raw=true "OMS lite logo")
