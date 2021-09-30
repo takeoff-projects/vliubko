@@ -81,7 +81,7 @@ jobs:
           gcloud run deploy ${{ env.APP_NAME }} \
             --project ${{ secrets.GCP_PROJECT_ID }} \
             --service-account "${{ env.APP_NAME }}@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
-            --image {{ steps.prep.outputs.tagged_image }} \
+            --image ${{ steps.prep.outputs.tagged_image }} \
             --region us-central1 \
             --platform managed \
             --allow-unauthenticated \
