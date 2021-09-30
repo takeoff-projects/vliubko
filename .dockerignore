@@ -3,3 +3,4 @@ init_scripts
 .dockerignore
 tmp
 .DS_Store
+.github
