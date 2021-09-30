@@ -218,10 +218,27 @@ if [ $create_init_resources == "true" ]; then
 fi
 
 
-CLOUDSQL_INSTANCE_NAME=$(gcloud sql instances list --project $GOOGLE_CLOUD_PROJECT --format json | jq -r '.[].name')
-CLOUDSQL_INSTANCE_IP_ADDRESS=$(gcloud sql instances list --project $GOOGLE_CLOUD_PROJECT --format json | jq -r '.[].ipAddresses[].ipAddress')
+_log "INFO" "Collecting CloudSQL info.."
+CLOUDSQL_INSTANCE_CONNECTION_NAME=$(gcloud sql instances list --project $GOOGLE_CLOUD_PROJECT --format json | jq -r '.[].connectionName')
+
+# TODO: get values from secret manager
 CLOUDSQL_DB_NAME="oms-lite"
 CLOUDSQL_DB_USER="oms-lite"
 CLOUDSQL_DB_PASSWORD="oms-lite"
 
-expect init_scripts/cloudsql_autoconnect.exp $CLOUDSQL_INSTANCE_NAME $CLOUDSQL_DB_USER $CLOUDSQL_DB_PASSWORD $GOOGLE_CLOUD_PROJECT
+_log "INFO" "Starting CloudSQL proxy..."
+set -x
+docker rm -f cloudsql_proxy
+docker run --name cloudsql_proxy -d \
+      -v $GSA_KEY_FILEPATH:/config \
+      -p 5432:5432 \
+      gcr.io/cloudsql-docker/gce-proxy:1.19.1 /cloud_sql_proxy \
+      -instances=${CLOUDSQL_INSTANCE_CONNECTION_NAME}=tcp:0.0.0.0:5432 \
+      -credential_file=/config
+
+# wait 5 sec until proxy will be available
+sleep 5
+
+make migrate-up
+
+docker rm -f cloudsql_proxy
