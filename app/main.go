@@ -19,6 +19,7 @@ import (
 	"oms-lite/docs"
 	otel_tracer "oms-lite/foundation"
 
+	"github.com/gin-contrib/cors"
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
@@ -58,6 +59,8 @@ func main() {
 
 	// init gin router
 	r := gin.Default()
+
+	r.Use(cors.Default())
 
 	// TODO: config reading and checks should be refactored with viper
 	var connectionString string
