@@ -3,6 +3,7 @@ import { getFirestore, collection, doc, query, where, onSnapshot, addDoc, delete
 
 var GOOGLE_PROJECT_ID = "roi-takeoff-user77"
 var FIREBASE_API_KEY = "AIzaSyA-QK9A8ZlxVb4fML8SrVgs4JJv2RGgXcA"
+const OMS_LITE_API = "https://oms-lite-964bmf9f.uc.gateway.dev"
 
 const firebaseConfig = {
     apiKey: FIREBASE_API_KEY,
@@ -119,6 +120,15 @@ var isotopeGrid = $('.pickers').isotope({
 });
 
 
+async function getOrders() {
+  try {
+    const response = await axios.get(OMS_LITE_API+'/api/v1/orders');
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 $(document).ready(function() {
   $(document).on('submit', '#add-new-picker', function() {
     var picker_name = $('#inputPickerName').val();
@@ -147,6 +157,8 @@ $(document).ready(function() {
     $("#"+`deletePickerman-${id}`).modal('toggle');
     $(".modal-backdrop").remove();
   });
+
+  getOrders();
   
   isotopeGrid.isotope('reloadItems')
 });
