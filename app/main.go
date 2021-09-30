@@ -47,7 +47,8 @@ func checkEnvVar(key string) {
 // @BasePath /api/v1
 func main() {
 
-	checkEnvVar("GOOGLE_APPLICATION_CREDENTIALS")
+	// TODO: enable this check for local mode
+	// checkEnvVar("GOOGLE_APPLICATION_CREDENTIALS")
 
 	// Initialize connection string.
 	var connectionString string = fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=%s",
