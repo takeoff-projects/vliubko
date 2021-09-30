@@ -78,7 +78,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy ${{ env.APP_NAME }} \
+          gcloud beta run deploy ${{ env.APP_NAME }} \
             --project ${{ secrets.GCP_PROJECT_ID }} \
             --service-account "${{ env.APP_NAME }}@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
             --image ${{ steps.prep.outputs.tagged_image }} \
