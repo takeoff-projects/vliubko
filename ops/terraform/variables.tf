@@ -51,6 +51,12 @@ variable "app_name" {
 }
 
 
+variable "cloudsql_instance_size" {
+  type        = string
+  default     = "db-f1-micro"
+  description = "description"
+}
+
 variable "db_name" {
   type        = string
   default     = "oms-lite"

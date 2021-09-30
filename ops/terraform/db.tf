@@ -14,7 +14,8 @@ module "cloudsql" {
 
   availability_type = "REGIONAL"
   region            = "us-east1"
-  tier              = "db-f1-micro"
+  zone              = "us-east1-c"
+  tier              = var.cloudsql_instance_size
 
   random_instance_name = true
   deletion_protection  = false
