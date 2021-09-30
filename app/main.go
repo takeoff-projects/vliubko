@@ -11,11 +11,13 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.opentelemetry.io/otel"
 
 	"oms-lite/app/handlers"
 	omslitedb "oms-lite/business/sys/database"
 	"oms-lite/docs"
+	otel_tracer "oms-lite/foundation"
 
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -32,20 +34,10 @@ func mustGetenv(key string) string {
 	return val
 }
 
-func checkEnvVar(key string) {
-	val, ok := os.LookupEnv(key)
-	if !ok {
-		log.Fatalf("%s not set\n", key)
-	}
-	log.Printf("%s=%s\n", key, val)
-}
-
 var (
-	dbUser                 = mustGetenv("POSTGRES_USER")            // e.g. 'my-db-user'
-	dbPwd                  = mustGetenv("POSTGRES_PASSWORD")        // e.g. 'my-db-password'
-	instanceConnectionName = mustGetenv("INSTANCE_CONNECTION_NAME") // e.g. 'project:region:instance'
-	dbName                 = mustGetenv("POSTGRES_DB")              // e.g. 'my-database'
-	// dbHost                 = mustGetenv("POSTGRES_HOST")            // e.g. 'localhost'
+	dbUser = mustGetenv("POSTGRES_USER")     // e.g. 'my-db-user'
+	dbPwd  = mustGetenv("POSTGRES_PASSWORD") // e.g. 'my-db-password'
+	dbName = mustGetenv("POSTGRES_DB")       // e.g. 'my-database'
 )
 
 // @title oms-lite API
@@ -57,20 +49,39 @@ var (
 // @BasePath /api/v1
 func main() {
 
-	// TODO: enable this check for local mode
-	// checkEnvVar("GOOGLE_APPLICATION_CREDENTIALS")
-
-	// Initialize connection string for local mode
-	// var connectionString string = fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=%s",
-	// 	mustGetenv("POSTGRES_HOST"), mustGetenv("POSTGRES_USER"), mustGetenv("POSTGRES_PASSWORD"), mustGetenv("POSTGRES_DB"), mustGetenv("POSTGRES_SSL_MODE"))
-
-	// if not local mode
-	socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+	env, isSet := os.LookupEnv("ENV")
 	if !isSet {
-		socketDir = "/cloudsql"
+		env = "LOCAL"
 	}
 
-	connectionString := fmt.Sprintf("user=%s password=%s database=%s host=%s/%s", dbUser, dbPwd, dbName, socketDir, instanceConnectionName)
+	// init gin router
+	r := gin.Default()
+
+	// TODO: config reading and checks should be refactored with viper
+	var connectionString string
+
+	if env == "LOCAL" {
+		mustGetenv("GOOGLE_APPLICATION_CREDENTIALS")
+		dbHost := mustGetenv("POSTGRES_HOST") // e.g. 'localhost'
+		connectionString = fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable",
+			dbHost, dbUser, dbPwd, dbName)
+	} else {
+		socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+		if !isSet {
+			socketDir = "/cloudsql"
+		}
+		instanceConnectionName := mustGetenv("INSTANCE_CONNECTION_NAME") // e.g. 'project:region:instance'
+		connectionString = fmt.Sprintf("user=%s password=%s database=%s host=%s/%s",
+			dbUser, dbPwd, dbName, socketDir, instanceConnectionName)
+		// init tracing for non local mode
+		tp := otel_tracer.InitTracer()
+		defer func() {
+			if err := tp.Shutdown(context.Background()); err != nil {
+				log.Printf("Error shutting down tracer provider: %v", err)
+			}
+		}()
+		r.Use(otelgin.Middleware("oms-lite"))
+	}
 
 	// Use the InitDB function to open connection and get db object
 	db, err := omslitedb.InitDB(connectionString)
@@ -79,19 +90,6 @@ func main() {
 	}
 
 	handlers := handlers.NewOrderHandler(db, otel.Tracer("oms-lite"))
-
-	// init gin router
-	r := gin.Default()
-
-	// init tracing
-
-	// tp := otel_tracer.InitTracer()
-	// defer func() {
-	// 	if err := tp.Shutdown(context.Background()); err != nil {
-	// 		log.Printf("Error shutting down tracer provider: %v", err)
-	// 	}
-	// }()
-	// r.Use(otelgin.Middleware("oms-lite"))
 
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r.GET("/", func(c *gin.Context) {

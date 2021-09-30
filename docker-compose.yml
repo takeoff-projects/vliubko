@@ -19,7 +19,6 @@ services:
       GOOGLE_APPLICATION_CREDENTIALS: /app/terraform-gsa-key.json
       POSTGRES_HOST: db
       POSTGRES_PASSWORD: db
-      POSTGRES_SSL_MODE: disable
   db:
     image: postgres:13-alpine
     command: ["postgres", "-c", "log_statement=all", "-c", "log_destination=stderr"]
