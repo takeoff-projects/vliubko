@@ -83,7 +83,7 @@ Specifications:
 * Multi-stage lightweight Docker image
 * Cached steps in the Docker image (faster CI)
 * Cached Docker buildx and Github Actions (faster CI)
-* GolangCI linter for Pull Requests
+* GolangCI linter for Pull Requests (example: https://github.com/takeoff-projects/vliubko/pull/1/files)
 * Graceful shutdown on interrupt signals
 <!-- * Health checks (readiness and liveness) -->
 * Tracing with OpenTelemetry and Google Trace
