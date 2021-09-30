@@ -22,7 +22,7 @@ Project contains three levels:
 | Level | Short description  | URL                                         |
 |-------|--------------------|---------------------------------------------|
 | 1     | Website            | https://takeoff-projects.github.io/vliubko/ |
-| 2     | RESTful API        | _in progress_
+| 2     | RESTful API        | https://oms-lite-r62e7tzm4a-uc.a.run.app/swagger/index.html
 | 3     | Whistles and bells | _in progress_ |
 
 
@@ -87,7 +87,7 @@ Specifications:
 * Graceful shutdown on interrupt signals
 <!-- * Health checks (readiness and liveness) -->
 * Tracing with OpenTelemetry and Google Trace
-* Swagger docs
+* semi-auto generated OpenAPI docs (to be used by Swagger UI and API gateway) 
 <!-- * Helm and Kustomize installers -->
 <!-- * End-to-End testing with Kubernetes Kind and Helm -->
 <!-- * CVE scanning with trivy -->
