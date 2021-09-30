@@ -88,6 +88,7 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --add-cloudsql-instances=$INSTANCE_CONNECTION_NAME \
+            --set-env-vars=ESPv2_ARGS=^++^--cors_preset=cors_with_regex++--cors_allow_origin_regex='.*' \
             --update-env-vars=ENV=PROD \
             --update-secrets=INSTANCE_CONNECTION_NAME=cloudsql_oms_lite_instance_connection:latest \
             --update-secrets=POSTGRES_DB=cloudsql_oms_lite_db_name:latest \
