@@ -4,7 +4,7 @@ import { getFirestore, collection, doc, query, where, onSnapshot, addDoc, delete
 var GOOGLE_PROJECT_ID = "roi-takeoff-user77"
 var FIREBASE_API_KEY = "AIzaSyA-QK9A8ZlxVb4fML8SrVgs4JJv2RGgXcA"
 const OMS_LITE_API_API_GATEWAY = "https://oms-lite-964bmf9f.uc.gateway.dev"
-const OMS_LITE_API_CLOUD_RUN = "https://oms-lite-r62e7tzm4a-uc.a.run.app"
+// const OMS_LITE_API_CLOUD_RUN = "https://oms-lite-r62e7tzm4a-uc.a.run.app"
 
 const firebaseConfig = {
     apiKey: FIREBASE_API_KEY,
@@ -32,14 +32,14 @@ const unsubscribe = onSnapshot(q, (querySnapshot) => {
   });
   console.log("Current pickermans: ", pickermans.join(""));
   // update isotope grid after changes
-  isotopeGrid.isotope('reloadItems')
-  isotopeGrid.isotope({ sortBy: 'status' });
+  isotopeGridPickers.isotope('reloadItems')
+  isotopeGridPickers.isotope({ sortBy: 'status' });
 });
 
 function addNewPickermanDiv(id, name, status, orderID) {
   var PickermanDiv = `
   <!-- Picker card start-->
-  <div class="card" style="width: 18rem;" id="${id}" picker-name="${name}" picking-status="${status}">
+  <div class="card border-info mb-3"  style="width: 18rem;" id="${id}" picker-name="${name}" picking-status="${status}">
 
     <div class="card-body">
       <div class="row">
@@ -112,7 +112,15 @@ function addNewPickermanDiv(id, name, status, orderID) {
   $('.pickers').append(PickermanDiv)
 }
 
-var isotopeGrid = $('.pickers').isotope({
+var isotopeGridPickers = $('.pickers').isotope({
+  layoutMode: 'fitRows',
+  getSortData: {
+    name: '.picker-name',
+    status: '[picking-status]'
+  }
+});
+
+var isotopeGridOrders = $('.orders').isotope({
   layoutMode: 'fitRows',
   getSortData: {
     name: '.picker-name',
@@ -124,10 +132,37 @@ var isotopeGrid = $('.pickers').isotope({
 async function getOrders(url) {
   try {
     const response = await axios.get(url+'/api/v1/orders');
-    console.log(response);
+    return response.data.orders;
   } catch (error) {
     console.error(error);
+    return nil
   }
+}
+
+function addNewOrderDiv(orderID, product, quantity) {
+  var OrderDiv = `
+  <div class="card border-success mb-3" style="max-width: 18rem;">
+    <div class="card-header text-info border-success font-weight-bold">ORDER # ${orderID}</div>
+      <div class="card-body text-dark">
+        <table class="table table-sm my-sm-0">
+          <thead>
+            <tr>
+              <th scope="col">${product}</th>
+              <th scope="col">${quantity}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="col"><p class="font-italic">product</p></td>
+              <td scope="col"><p class="font-italic">quantity</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  `
+  return OrderDiv
 }
 
 $(document).ready(function() {
@@ -159,8 +194,14 @@ $(document).ready(function() {
     $(".modal-backdrop").remove();
   });
 
-  getOrders(OMS_LITE_API_API_GATEWAY);
-  getOrders(OMS_LITE_API_CLOUD_RUN);
-  
-  isotopeGrid.isotope('reloadItems')
+  getOrders(OMS_LITE_API_API_GATEWAY)
+    .then(orders => orders.forEach((order) => {
+      console.log(order)
+      var orderDiv = addNewOrderDiv(order.id, order.productname, order.quantity)
+      $('.orders').append(orderDiv)
+    })
+    )
+
+    isotopeGridPickers.isotope('reloadItems')
+    isotopeGridOrders.isotope('reloadItems')
 });

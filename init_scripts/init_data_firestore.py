@@ -14,12 +14,21 @@ def init_pickermans():
     init_pickermans = [
         {
             "name": "Mr. Picker",
-            "status": "idle"
+            "status": "picking",
+            "order": 123456
         },
         {
             "name": "Zaza the Great",
             "status": "idle"
-        }
+        },
+        {
+            "name": "ClojureMan",
+            "status": "idle"
+        },
+        {
+            "name": "Winter Fresh",
+            "status": "idle"
+        },
     ]
     print("Will initialize pickermans docs in Firestore...")
     print(init_pickermans)
