@@ -74,3 +74,9 @@ variable "db_password" {
   default     = "oms-lite"
   description = "description"
 }
+
+variable cloud_run_url {
+  type        = string
+  default     = "https://oms-lite-r62e7tzm4a-uc.a.run.app/"
+  description = "description"
+}

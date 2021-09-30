@@ -47,6 +47,8 @@ var (
 // @license.name Apache 2.0
 
 // @BasePath /api/v1
+// @x-google-backend {"address": "${cloud_run_url}"}
+
 func main() {
 
 	env, isSet := os.LookupEnv("ENV")

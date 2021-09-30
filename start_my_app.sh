@@ -207,7 +207,7 @@ if [ $create_init_resources == "true" ]; then
   set -e
 fi
 
-# _apply_terraform
+_apply_terraform
 
 # back from terraform dir
 cd "../.."

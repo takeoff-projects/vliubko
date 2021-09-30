@@ -33,6 +33,7 @@ paths:
     get:
       consumes:
       - application/json
+      operationId: list_all_orders
       produces:
       - application/json
       responses:
@@ -54,6 +55,7 @@ paths:
     post:
       consumes:
       - application/json
+      operationId: create_order
       parameters:
       - description: Create order with product&quantity
         in: body
@@ -80,6 +82,7 @@ paths:
     delete:
       consumes:
       - application/json
+      operationId: delete_order_by_id
       parameters:
       - description: Order ID
         in: path
@@ -99,6 +102,7 @@ paths:
     get:
       consumes:
       - application/json
+      operationId: get_order_by_id
       parameters:
       - description: Order ID
         in: path
@@ -121,3 +125,5 @@ paths:
       tags:
       - orders
 swagger: "2.0"
+x-google-backend:
+  address: ${cloud_run_url}

@@ -36,6 +36,7 @@ func NewOrderHandler(db *omslitedb.Queries, tracer oteltrace.Tracer) *OrderHandl
 // @BasePath /api/v1
 // @Summary list all orders
 // @Schemes
+// @Id list_all_orders
 // @Tags orders
 // @Accept json
 // @Produce json
@@ -61,6 +62,7 @@ func (h *OrderHandler) ListOrdersHandler(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary get order by id
 // @Schemes
+// @Id get_order_by_id
 // @Tags orders
 // @Accept json
 // @Produce json
@@ -97,6 +99,7 @@ func (h *OrderHandler) GetOrderHandler(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary delete order by id
 // @Schemes
+// @Id delete_order_by_id
 // @Tags orders
 // @Accept json
 // @Produce json
@@ -123,6 +126,7 @@ func (h *OrderHandler) DeleteOrderHandler(c *gin.Context) {
 // @BasePath /api/v1
 // @Summary create new order
 // @Schemes
+// @Id create_order
 // @Tags orders
 // @Accept json
 // @Produce json

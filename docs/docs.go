@@ -38,6 +38,7 @@ var doc = `{
                     "orders"
                 ],
                 "summary": "list all orders",
+                "operationId": "list_all_orders",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -75,6 +76,7 @@ var doc = `{
                     "orders"
                 ],
                 "summary": "create new order",
+                "operationId": "create_order",
                 "parameters": [
                     {
                         "description": "Create order with product\u0026quantity",
@@ -120,6 +122,7 @@ var doc = `{
                     "orders"
                 ],
                 "summary": "get order by id",
+                "operationId": "get_order_by_id",
                 "parameters": [
                     {
                         "type": "string",
@@ -161,6 +164,7 @@ var doc = `{
                     "orders"
                 ],
                 "summary": "delete order by id",
+                "operationId": "delete_order_by_id",
                 "parameters": [
                     {
                         "type": "string",
@@ -215,6 +219,9 @@ var doc = `{
                 }
             }
         }
+    },
+    "x-google-backend": {
+        "address": "${cloud_run_url}"
     }
 }`
 
