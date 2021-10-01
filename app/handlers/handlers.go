@@ -70,9 +70,9 @@ func (h *OrderHandler) ListOrdersHandler(c *gin.Context) {
 // @Param order_id path string true "Order ID"
 // @Router /orders/{order_id} [get]
 func (h *OrderHandler) GetOrderHandler(c *gin.Context) {
-	id_string := c.Param("id")
+	idString := c.Param("id")
 
-	id, err := strconv.ParseInt(id_string, 10, 64)
+	id, err := strconv.ParseInt(idString, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
@@ -109,6 +109,7 @@ func (h *OrderHandler) GetOrderHandler(c *gin.Context) {
 func (h *OrderHandler) DeleteOrderHandler(c *gin.Context) {
 	id := c.GetInt64("id")
 	_, span := h.Tracer.Start(c.Request.Context(), "DeleteOrderById", oteltrace.WithAttributes(attribute.Int64("id", id)))
+
 	defer span.End()
 
 	if err := model.DeleteOrderByID(c, h.Db, id); err != nil {
@@ -141,6 +142,7 @@ func (h *OrderHandler) CreateOrderHandler(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&Order); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
 		return
 	}
 
@@ -150,6 +152,7 @@ func (h *OrderHandler) CreateOrderHandler(c *gin.Context) {
 			"status": "fail",
 			"error":  err,
 		})
+
 		return
 	}
 
