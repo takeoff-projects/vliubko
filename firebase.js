@@ -1,8 +1,8 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js'
 import { getFirestore, collection, doc, query, where, onSnapshot, addDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js'
 
-var GOOGLE_PROJECT_ID = "roi-takeoff-user77"
-var FIREBASE_API_KEY = "AIzaSyA-QK9A8ZlxVb4fML8SrVgs4JJv2RGgXcA"
+const GOOGLE_PROJECT_ID = "roi-takeoff-user77"
+const FIREBASE_API_KEY = "123"
 const OMS_LITE_API_API_GATEWAY = "https://oms-lite-964bmf9f.uc.gateway.dev"
 // const OMS_LITE_API_CLOUD_RUN = "https://oms-lite-r62e7tzm4a-uc.a.run.app"
 
