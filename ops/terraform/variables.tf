@@ -8,6 +8,7 @@ variable "google_apis" {
   default = [
     "cloudresourcemanager.googleapis.com",
     "containerregistry.googleapis.com",
+    "appengine.googleapis.com",
     "firebase.googleapis.com",
     "firestore.googleapis.com",
     "cloudtrace.googleapis.com",
@@ -77,6 +78,6 @@ variable "db_password" {
 
 variable cloud_run_url {
   type        = string
-  default     = "https://oms-lite-r62e7tzm4a-uc.a.run.app/"
+  default     = ""
   description = "description"
 }

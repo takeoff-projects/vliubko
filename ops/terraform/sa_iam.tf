@@ -8,4 +8,7 @@ module "oms_lite_sa" {
     "${var.google_project_id}=>roles/cloudsql.client",
     "${var.google_project_id}=>roles/secretmanager.secretAccessor",
   ]
+  depends_on = [
+    google_project_service.project_services
+  ]
 }

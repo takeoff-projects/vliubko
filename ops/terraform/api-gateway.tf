@@ -6,6 +6,10 @@ module "api_gw_sa" {
   project_roles = [
     "${var.google_project_id}=>roles/run.invoker",
   ]
+
+  depends_on = [
+    google_project_service.project_services
+  ]
 }
 
 resource "google_api_gateway_api" "api" {
@@ -19,6 +23,9 @@ resource "google_api_gateway_api" "api" {
     author  = "vliubko"
     service = var.app_name
   }
+  depends_on = [
+    google_project_service.project_services
+  ]
 }
 
 resource "google_api_gateway_api_config" "api_gw" {

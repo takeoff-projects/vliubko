@@ -28,7 +28,7 @@ def init_pickermans():
         {
             "name": "Winter Fresh",
             "status": "idle"
-        },
+        }
     ]
     print("Will initialize pickermans docs in Firestore...")
     print(init_pickermans)
