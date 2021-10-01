@@ -16,3 +16,7 @@ output cloudsql_db_password {
 output app_service_account_email {
   value       = module.oms_lite_sa.email
 }
+
+output api_gateway_url {
+  value       = google_api_gateway_gateway.api_gw.default_hostname
+}

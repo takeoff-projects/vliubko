@@ -205,9 +205,9 @@ fi
 
 # will be used by terraform code
 export TF_VAR_google_project_id=$GOOGLE_CLOUD_PROJECT
-export TF_VAR_cloud_run_url="$(gcloud run services --quiet describe $APP_NAME --region us-central1 --project $GOOGLE_CLOUD_PROJECT --format json 2&>/dev/null | jq -r '.status.url')/"
+export TF_VAR_cloud_run_url="$(gcloud run services --quiet describe $APP_NAME --region us-central1 --project $GOOGLE_CLOUD_PROJECT --format json 2&>/dev/null | jq -r '.status.url')"
 
-if [ "$TF_VAR_cloud_run_url" = "/" ]; then
+if [ "$TF_VAR_cloud_run_url" = "" ]; then
   export TF_VAR_cloud_run_url="https://google.com"
 fi
 export GOOGLE_APPLICATION_CREDENTIALS=$GSA_KEY_FILEPATH
@@ -301,9 +301,10 @@ gcloud beta run deploy $APP_NAME \
   --update-secrets=POSTGRES_USER=cloudsql_oms_lite_db_user:latest \
   --update-secrets=POSTGRES_PASSWORD=cloudsql_oms_lite_db_password:latest \
 
-export TF_VAR_cloud_run_url="$(gcloud run services describe $APP_NAME --region us-central1 --project $GOOGLE_CLOUD_PROJECT --format json | jq -r '.status.url')"/
+export TF_VAR_cloud_run_url="$(gcloud run services describe $APP_NAME --region us-central1 --project $GOOGLE_CLOUD_PROJECT --format json | jq -r '.status.url')"
 cd ops/terraform
 terraform apply -target='google_api_gateway_api_config.api_gw' -target='google_api_gateway_gateway.api_gw'
+OMS_LITE_API_API_GATEWAY=$(terraform output --raw api_gateway_url)
 # back from terraform dir
 cd "../.."
 
@@ -321,7 +322,7 @@ https://github.com/takeoff-projects/vliubko/settings/secrets/actions
   fi
 
 gsed -i "s/const FIREBASE_API_KEY = .*/const FIREBASE_API_KEY = \"$FIREBASE_API_KEY\"/" public/firebase.js
-gsed -i "s/const OMS_LITE_API_API_GATEWAY = .*/const OMS_LITE_API_API_GATEWAY = \"$TF_VAR_cloud_run_url\"/" public/firebase.js
+gsed -i "s/const OMS_LITE_API_API_GATEWAY = .*/const OMS_LITE_API_API_GATEWAY = \"$OMS_LITE_API_API_GATEWAY\"/" public/firebase.js
 gsed -i "s/const GOOGLE_PROJECT_ID = .*/const GOOGLE_PROJECT_ID = \"$GOOGLE_CLOUD_PROJECT\"/" public/firebase.js
 
 git add public/firebase.js
